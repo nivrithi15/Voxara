@@ -1,3 +1,5 @@
+import { auth, db, collection, addDoc, serverTimestamp } from "./firebase-config.js";
+
 const quizData = [
     {
         question: "What is the minimum voting age in most countries including India and the US?",
@@ -64,6 +66,8 @@ const quizData = [
 let currentQuestion = 0;
 let score = 0;
 let canAnswer = true;
+let userAnswers = [];
+const BACKEND_URL = 'http://localhost:5000/api';
 
 const DOM = {
     startScreen: document.getElementById('start-screen'),
@@ -94,9 +98,11 @@ function startQuiz() {
 function restartQuiz() {
     currentQuestion = 0;
     score = 0;
+    userAnswers = [];
     DOM.resultsScreen.classList.remove('active');
     DOM.startScreen.classList.add('active');
 }
+
 
 // --- CORE LOGIC ---
 function loadQuestion() {
@@ -129,7 +135,10 @@ function handleAnswer(index) {
     const q = quizData[currentQuestion];
     const cards = DOM.optionsGrid.querySelectorAll('.option-card');
     
+    userAnswers.push(index);
+
     if (index === q.correct) {
+
         score++;
         cards[index].classList.add('correct');
         DOM.feedbackText.innerText = "Correct! " + q.explanation;
@@ -151,14 +160,42 @@ function handleAnswer(index) {
     }, 2500);
 }
 
-function showResults() {
+async function showResults() {
     DOM.questionScreen.classList.remove('active');
     DOM.resultsScreen.classList.add('active');
     DOM.progressFill.style.width = `100%`;
     
-    DOM.finalScore.innerText = score;
+    DOM.finalScore.innerText = "...";
     
-    if (score === 10) {
+    try {
+        const response = await fetch(`${BACKEND_URL}/quiz/score`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers: userAnswers })
+        });
+        const data = await response.json();
+        score = data.score;
+        DOM.finalScore.innerText = score;
+
+        // --- SAVE TO FIRESTORE ---
+        const user = auth.currentUser;
+        if (user) {
+            await addDoc(collection(db, "quiz_results"), {
+                userId: user.uid,
+                userName: user.displayName,
+                score: score,
+                total: quizData.length,
+                timestamp: serverTimestamp()
+            });
+            console.log("Score saved to Firestore");
+        }
+    } catch (e) {
+
+        console.error("Backend scoring failed:", e);
+        DOM.finalScore.innerText = score + " (Local)";
+    }
+    
+    if (score === quizData.length) {
         DOM.resultTitle.innerText = "Elite Citizen!";
         DOM.resultMessage.innerText = "Perfect score! You're fully ready to navigate any election.";
     } else if (score >= 7) {
@@ -171,6 +208,7 @@ function showResults() {
     
     initSharing();
 }
+
 
 // --- SOCIAL SHARING LOGIC ---
 function initSharing() {

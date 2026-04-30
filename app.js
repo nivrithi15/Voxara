@@ -18,13 +18,20 @@ const regionData = {
 };
 
 /**
+ * BACKEND API CONFIGURATION
+ */
+const BACKEND_URL = 'http://localhost:5000/api';
+
+
+
+/**
  * processText - Replaces placeholder tokens {{key}} with region-specific data.
  */
 function processText(text) {
     let result = text;
     const data = regionData[userRegion];
     if (!data) return result;
-    
+
     for (const key in data) {
         result = result.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
     }
@@ -52,7 +59,7 @@ const flowData = {
     set_uk: { setRegion: "uk", nextNode: "start" },
     set_germany: { setRegion: "germany", nextNode: "start" },
     set_general: { setRegion: "general", nextNode: "start" },
-    
+
     start: {
         text: ["Hi! I'm Voxara 👋 Ask me anything about elections. What would you like to explore?"],
         options: [
@@ -64,7 +71,7 @@ const flowData = {
             { label: "Change country", next: "init" }
         ]
     },
-    
+
     // Redirection nodes
     redirect_timeline: {
         text: ["Taking you to the interactive timeline..."],
@@ -82,10 +89,10 @@ const flowData = {
         text: ["Entering the voting simulation booth..."],
         redirect: "simulate.html"
     },
-    
+
     // Additional flow nodes (how_work, steps_start, etc.) remain configured in flowData...
     // [Flow nodes follow consistent structure: text[] and options[]]
-    
+
     steps_start: {
         progressTotal: ["Register", "Prepare", "Vote"],
         progressStep: 0,
@@ -247,6 +254,76 @@ const flowData = {
 };
 
 /**
+ * GEMINI API INTEGRATION
+ */
+
+async function callGeminiAPI(userInput) {
+    const region = regionData[userRegion] || regionData.general;
+    
+    const response = await fetch(`${BACKEND_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            message: userInput,
+            region: region.displayName
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('BACKEND_API_FAILED');
+    }
+
+    const data = await response.json();
+    return data.response;
+}
+
+
+async function handleUserInput() {
+    const text = DOM.userInput.value.trim();
+    if (!text) return;
+
+    // 1. Clear input and show user message
+    DOM.userInput.value = '';
+    appendMessage(text, true);
+
+    // 2. Clear current options to focus on the dynamic response
+    DOM.optionsContainer.innerHTML = '';
+
+    // 3. Show typing indicator
+    DOM.typingIndicator.style.display = 'flex';
+    scrollToBottom();
+
+    try {
+        // 4. Call Gemini API
+        const response = await callGeminiAPI(text);
+
+        // 5. Hide typing and show response
+        DOM.typingIndicator.style.display = 'none';
+        appendMessage(response, false);
+
+        // 6. Provide a way back to the main flow
+        renderOptions([
+            { label: "Back to menu", next: "start" },
+            { label: "Ask something else", isPrimary: true, action: () => DOM.userInput.focus() }
+        ]);
+    } catch (error) {
+        console.error('Gemini Error:', error);
+        DOM.typingIndicator.style.display = 'none';
+
+        let fallbackMsg = "I'm having trouble connecting to my AI brain right now. 🤖";
+        if (error.message === 'BACKEND_API_FAILED') {
+            fallbackMsg = "The Voxara backend is currently unreachable. Please ensure the server is running!";
+        }
+
+        appendMessage(fallbackMsg, false);
+        appendMessage("In the meantime, you can explore these topics:", false);
+
+        renderOptions(flowData.start.options);
+    }
+}
+
+
+/**
  * UI RENDERING SECTION
  * Handles DOM manipulation for chat bubbles, options, and progress bars.
  */
@@ -256,17 +333,17 @@ function renderProgressBar(totalSteps, currentStep) {
         DOM.progressContainer.style.display = 'none';
         return;
     }
-    
+
     DOM.progressContainer.style.display = 'flex';
     DOM.progressContainer.innerHTML = '';
-    
+
     totalSteps.forEach((stepName, index) => {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'step';
-        
+
         if (index < currentStep) stepDiv.classList.add('completed');
         else if (index === currentStep) stepDiv.classList.add('active');
-        
+
         stepDiv.innerHTML = `
             <div class="step-icon">
                 ${index < currentStep ? '<i class="fa-solid fa-check"></i>' : index + 1}
@@ -280,19 +357,19 @@ function renderProgressBar(totalSteps, currentStep) {
 function appendMessage(text, isUser = false) {
     const wrapper = document.createElement('div');
     wrapper.className = `message-wrapper ${isUser ? 'user' : 'bot'}`;
-    
+
     if (!isUser) {
         const avatar = document.createElement('div');
         avatar.className = 'avatar-small';
         avatar.innerHTML = '<i class="fa-solid fa-robot"></i>';
         wrapper.appendChild(avatar);
     }
-    
+
     const bubble = document.createElement('div');
     bubble.className = 'message-bubble';
     bubble.innerText = text;
     wrapper.appendChild(bubble);
-    
+
     DOM.chatArea.insertBefore(wrapper, DOM.typingIndicator);
     scrollToBottom();
 }
@@ -308,7 +385,10 @@ function renderOptions(options) {
         btn.className = `option-btn ${opt.isPrimary ? 'primary' : ''}`;
         btn.innerText = opt.label;
         btn.style.animationDelay = `${index * 0.1}s`;
-        btn.onclick = () => handleOptionClick(opt);
+        btn.onclick = () => {
+            if (opt.action) opt.action();
+            else handleOptionClick(opt);
+        };
         DOM.optionsContainer.appendChild(btn);
     });
 }
@@ -334,7 +414,7 @@ async function processNode(nodeId) {
     if (node.progressTotal) {
         DOM.progressContainer.dataset.steps = JSON.stringify(node.progressTotal);
     }
-    
+
     if (node.progressStep !== undefined) {
         const steps = JSON.parse(DOM.progressContainer.dataset.steps || '[]');
         renderProgressBar(steps, node.progressStep);
@@ -347,12 +427,12 @@ async function processNode(nodeId) {
     for (let i = 0; i < node.text.length; i++) {
         DOM.typingIndicator.style.display = 'flex';
         scrollToBottom();
-        
+
         const processedText = processText(node.text[i]);
         const delay = Math.min(Math.max(processedText.length * 15, 600), 1500);
-        
+
         await new Promise(r => setTimeout(r, delay));
-        
+
         DOM.typingIndicator.style.display = 'none';
         appendMessage(processedText, false);
     }
@@ -398,14 +478,24 @@ document.addEventListener('DOMContentLoaded', () => {
             DOM.chatArea.appendChild(DOM.typingIndicator);
             DOM.optionsContainer.innerHTML = '';
             if (DOM.progressContainer) DOM.progressContainer.style.display = 'none';
-            
+
             // 2. Reset regional state to allow a fresh start
             localStorage.removeItem('userRegion');
             userRegion = 'general';
             applyTheme('general');
-            
+
             // 3. Restart conversation from the very beginning
             processNode('init');
+        });
+    }
+
+    if (DOM.sendBtn) {
+        DOM.sendBtn.addEventListener('click', handleUserInput);
+    }
+
+    if (DOM.userInput) {
+        DOM.userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserInput();
         });
     }
 

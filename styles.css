@@ -504,6 +504,67 @@ h1, h2, h3 {
     margin: 0 auto;
 }
 
+/* Chat Input Area */
+.chat-input-container {
+    display: flex;
+    gap: 12px;
+    max-width: 1000px;
+    margin: 20px auto 0;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.chat-input-container:focus-within {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: var(--theme-color-2);
+    box-shadow: 0 8px 32px var(--theme-accent);
+}
+
+#user-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 1rem;
+    padding: 10px;
+    outline: none;
+    font-family: inherit;
+}
+
+#user-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#send-btn {
+    background: linear-gradient(135deg, var(--theme-color-1), var(--theme-color-2));
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#send-btn:hover {
+    transform: scale(1.1) rotate(-10deg);
+    box-shadow: 0 6px 20px var(--theme-accent);
+}
+
+#send-btn:active {
+    transform: scale(0.95);
+}
+
 .option-btn {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);

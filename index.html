@@ -16,6 +16,14 @@
 
 <body>
     <div class="aurora-bg"></div>
+    
+    <nav class="top-nav">
+        <div id="user-info" class="user-info" style="display: none;">
+            <span id="user-name"></span>
+            <button id="logout-btn" class="nav-btn-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+        <a href="auth.html" id="login-btn" class="nav-btn-link"><i class="fa-solid fa-user"></i> Login / Sign Up</a>
+    </nav>
 
     <div class="intro-container">
         <!-- Floating Header -->
@@ -70,7 +78,7 @@
     </div>
 
     <script src="theme.js"></script>
-    <script src="intro.js"></script>
+    <script type="module" src="intro.js"></script>
     <script src="test-runner.js"></script>
 </body>
 
