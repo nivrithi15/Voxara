@@ -58,6 +58,10 @@ function initGoogleServices() {
     gtag('js', new Date());
     gtag('config', 'G-MOCK-ID');
     
+    // Only initialize if the target element exists in the current page
+    const translateElement = document.getElementById('google_translate_element');
+    if (!translateElement) return;
+
     // Inject Google Translate element.js
     const translateScript = document.createElement('script');
     translateScript.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';

@@ -1,13 +1,7 @@
 /**
  * CHATBOT CONFIGURATION & STATE
  */
-const DOM = {
-    chatArea: document.getElementById('chat-area'),
-    optionsContainer: document.getElementById('options-container'),
-    typingIndicator: document.getElementById('typing-indicator'),
-    progressContainer: document.getElementById('progress-container'),
-    restartBtn: document.getElementById('restart-btn')
-};
+let DOM = {};
 
 let userRegion = localStorage.getItem('userRegion') || 'general';
 
@@ -43,7 +37,7 @@ function processText(text) {
  */
 const flowData = {
     init: {
-        text: ["Hi! I'm Voxara 👋", "I can help you understand how elections work.", "Please select your country to continue:"],
+        text: ["Hi! I'm Voxara 👋", "Ask me anything about elections.", "Please select your country to continue:"],
         options: [
             { label: "India", next: "set_india" },
             { label: "United States", next: "set_us" },
@@ -60,7 +54,7 @@ const flowData = {
     set_general: { setRegion: "general", nextNode: "start" },
     
     start: {
-        text: ["Hi! I'm Voxara 👋 I can help you understand how elections work. What would you like to explore?"],
+        text: ["Hi! I'm Voxara 👋 Ask me anything about elections. What would you like to explore?"],
         options: [
             { label: "How elections work", next: "how_work" },
             { label: "View timeline", next: "redirect_timeline" },
@@ -383,27 +377,48 @@ function handleOptionClick(option) {
  * INITIALIZATION & NAVIGATION FLOW
  */
 document.addEventListener('DOMContentLoaded', () => {
-    DOM.restartBtn.addEventListener('click', () => {
-        // 1. Clear UI Elements
-        DOM.chatArea.innerHTML = '';
-        DOM.chatArea.appendChild(DOM.typingIndicator);
-        DOM.optionsContainer.innerHTML = '';
-        DOM.progressContainer.style.display = 'none';
-        
-        // 2. Reset regional state to allow a fresh start
-        localStorage.removeItem('userRegion');
-        userRegion = 'general';
-        applyTheme('general');
-        
-        // 3. Restart conversation from the very beginning
-        processNode('init');
-    });
+    // 1. Initialize DOM references
+    DOM = {
+        chatArea: document.getElementById('chat-area'),
+        userInput: document.getElementById('user-input'),
+        sendBtn: document.getElementById('send-btn'),
+        optionsContainer: document.getElementById('options-container'),
+        typingIndicator: document.getElementById('typing-indicator'),
+        restartBtn: document.getElementById('restart-btn'),
+        progressContainer: document.querySelector('.progress-tracker'),
+        progressFill: document.getElementById('progress-fill'),
+        progressText: document.getElementById('progress-text')
+    };
 
-    // STARTUP LOGIC:
+    // 2. Setup Listeners
+    if (DOM.restartBtn) {
+        DOM.restartBtn.addEventListener('click', () => {
+            // 1. Clear UI Elements
+            DOM.chatArea.innerHTML = '';
+            DOM.chatArea.appendChild(DOM.typingIndicator);
+            DOM.optionsContainer.innerHTML = '';
+            if (DOM.progressContainer) DOM.progressContainer.style.display = 'none';
+            
+            // 2. Reset regional state to allow a fresh start
+            localStorage.removeItem('userRegion');
+            userRegion = 'general';
+            applyTheme('general');
+            
+            // 3. Restart conversation from the very beginning
+            processNode('init');
+        });
+    }
+
+    // 3. STARTUP LOGIC:
     // Automatically trigger the correct conversation node on page load.
     if (!localStorage.getItem('userRegion')) {
         processNode('init');
     } else {
         processNode('start');
+    }
+
+    // 4. Focus input if it exists
+    if (DOM.userInput) {
+        DOM.userInput.focus();
     }
 });

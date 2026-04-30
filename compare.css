@@ -8,7 +8,7 @@
 .compare-container {
     width: 100%;
     max-width: 1200px;
-    height: 90vh;
+    min-height: 90vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
