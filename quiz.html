@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voxara - Knowledge Quiz</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit, Roboto, Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="quiz.css">
+    <link rel="stylesheet" href="test-runner.css">
+    <link rel="stylesheet" href="accessibility.css">
 </head>
 <body>
     <div class="aurora-bg"></div>
@@ -23,12 +25,13 @@
                         <span class="status">Test Your Knowledge!</span>
                     </div>
                 </div>
+                <div id="google_translate_element" style="margin: 0 10px;"></div>
                 <div class="header-actions">
-                    <a href="index.html" class="nav-link" title="Back to Chat">
-                        <i class="fa-solid fa-comments"></i>
+                    <a href="index.html" class="nav-link" title="Back to Chat" aria-label="Go back to Home">
+                        <i class="fa-solid fa-comments" aria-hidden="true"></i>
                     </a>
-                    <a href="timeline.html" class="nav-link" title="Interactive Timeline">
-                        <i class="fa-solid fa-calendar-days"></i>
+                    <a href="timeline.html" class="nav-link" title="Interactive Timeline" aria-label="View Election Timeline">
+                        <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
@@ -90,5 +93,6 @@
 
     <script src="theme.js"></script>
     <script src="quiz.js"></script>
+    <script src="test-runner.js"></script>
 </body>
 </html>

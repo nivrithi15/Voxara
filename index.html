@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voxara - Understand Elections. Step by Step.</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit, Roboto, Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="intro.css">
+    <link rel="stylesheet" href="test-runner.css">
+    <link rel="stylesheet" href="accessibility.css">
 </head>
 
 <body>
@@ -23,6 +25,7 @@
             </div>
             <h1 class="main-title">Voxara</h1>
             <p class="tagline">Understand Elections. Step by Step.</p>
+            <div id="google_translate_element" style="margin-bottom: 20px;"></div>
             <p class="description">An interactive AI assistant that guides you through how elections work, no matter where you are.</p>
         </header>
 
@@ -30,8 +33,8 @@
         <div class="region-selector-wrapper">
             <label for="region-select">Select your region to personalize your experience:</label>
             <div class="custom-select-container">
-                <i class="fa-solid fa-earth-americas select-icon"></i>
-                <select id="region-select" class="region-select">
+                <i class="fa-solid fa-earth-americas select-icon" aria-hidden="true"></i>
+                <select id="region-select" class="region-select" aria-label="Select your region">
                     <option value="general" selected>General / Global</option>
                     <option value="india">India</option>
                     <option value="us">United States</option>
@@ -43,8 +46,8 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <a href="chat.html" class="btn primary-btn pulse-animation">
-                <span>Get Started</span> <i class="fa-solid fa-arrow-right"></i>
+            <a href="chat.html" class="btn primary-btn pulse-animation" aria-label="Start chatting with Voxara">
+                <span>Get Started</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </a>
             <div class="secondary-actions">
                 <a href="timeline.html" class="btn secondary-btn">
@@ -68,6 +71,7 @@
 
     <script src="theme.js"></script>
     <script src="intro.js"></script>
+    <script src="test-runner.js"></script>
 </body>
 
 </html>

@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voxara - Election Assistant</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit, Roboto, Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="test-runner.css">
+    <link rel="stylesheet" href="accessibility.css">
 </head>
 
 <body>
@@ -25,15 +27,16 @@
                         <span class="status">Online</span>
                     </div>
                 </div>
+                <div id="google_translate_element" style="margin: 0 15px;"></div>
                 <div class="header-actions">
                     <a href="quiz.html" class="timeline-link" title="Take the Quiz" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
                         <i class="fa-solid fa-clipboard-question"></i> Quiz
                     </a>
-                    <a href="timeline.html" class="timeline-link" title="Interactive Timeline">
-                        <i class="fa-solid fa-calendar-days"></i> Timeline
+                    <a href="timeline.html" class="timeline-link" title="Interactive Timeline" aria-label="View Election Timeline">
+                        <i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Timeline
                     </a>
-                    <button class="restart-btn" id="restart-btn" title="Restart Conversation">
-                        <i class="fa-solid fa-arrow-rotate-right"></i>
+                    <button class="restart-btn" id="restart-btn" title="Restart Conversation" aria-label="Restart Conversation">
+                        <i class="fa-solid fa-arrow-rotate-right" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -67,6 +70,7 @@
 
     <script src="theme.js"></script>
     <script src="app.js?v=2"></script>
+    <script src="test-runner.js"></script>
 </body>
 
 </html>

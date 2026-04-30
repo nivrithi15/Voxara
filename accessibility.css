@@ -1,0 +1,162 @@
+/* Accessibility Styles */
+
+:root {
+    --a11y-bg: #ffffff;
+    --a11y-text: #000000;
+    --a11y-accent: #0000ff;
+    --base-font-size: 16px;
+}
+
+body {
+    font-size: var(--base-font-size);
+}
+
+/* Accessibility Widget */
+.a11y-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10000;
+    font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.a11y-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1f2937;
+    color: white;
+    border: 2px solid white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.a11y-toggle:hover {
+    transform: scale(1.1);
+}
+
+.a11y-menu {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 220px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.a11y-menu.show {
+    display: flex;
+}
+
+.a11y-menu h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.a11y-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.a11y-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.a11y-btn:hover {
+    background: #e5e7eb;
+}
+
+.a11y-mode-toggle {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #1f2937;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Accessible Mode Overrides */
+body.a11y-mode {
+    background: #f0f0f0 !important;
+    color: #000000 !important;
+}
+
+body.a11y-mode .aurora-bg {
+    display: none !important;
+}
+
+body.a11y-mode .app-container, 
+body.a11y-mode .intro-container,
+body.a11y-mode .timeline-content,
+body.a11y-mode .quiz-card,
+body.a11y-mode .region-selector-wrapper {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    border: 3px solid #000000 !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+}
+
+body.a11y-mode .primary-btn,
+body.a11y-mode .btn.primary-btn,
+body.a11y-mode .option-btn.primary {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.a11y-mode .secondary-btn,
+body.a11y-mode .btn.secondary-btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: none !important;
+}
+
+body.a11y-mode * {
+    animation: none !important;
+    transition: none !important;
+}
+
+body.a11y-mode .message-bubble {
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+}
+
+body.a11y-mode .user .message-bubble {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.a11y-mode .bot .message-bubble {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Keyboard Focus */
+*:focus-visible {
+    outline: 4px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+}

@@ -1,7 +1,7 @@
 :root {
-    --bg-color: #0f172a;
-    --app-bg: rgba(255, 255, 255, 0.85);
-    --app-border: rgba(255, 255, 255, 0.5);
+    --bg-color: #050b14;
+    --app-bg: rgba(255, 255, 255, 0.15);
+    --app-border: rgba(255, 255, 255, 0.3);
     
     /* Default / General Theme Variables */
     --theme-color-1: #4f46e5;
@@ -10,10 +10,10 @@
     
     --text-main: #1f2937;
     --text-muted: #6b7280;
-    --bot-msg-bg: rgba(243, 244, 246, 0.85);
+    --bot-msg-bg: rgba(255, 255, 255, 0.65);
     --user-msg-text: #ffffff;
-    --border-color: rgba(229, 231, 235, 0.6);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --border-color: rgba(255, 255, 255, 0.2);
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --radius-lg: 16px;
@@ -28,7 +28,7 @@
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     display: flex;
@@ -48,7 +48,10 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(120deg, var(--bg-color), #1e293b);
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.02) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 55%, transparent 60%),
+                linear-gradient(135deg, var(--bg-color), #091020);
+    background-size: 200% 200%, 100% 100%;
+    animation: bgStreaks 20s linear infinite;
     overflow: hidden;
 }
 
@@ -62,23 +65,30 @@ body {
     background: radial-gradient(circle at 50% 50%, var(--theme-color-1), transparent 60%),
                 radial-gradient(circle at 80% 20%, var(--theme-color-2), transparent 50%),
                 radial-gradient(circle at 20% 80%, var(--theme-accent), transparent 50%);
-    filter: blur(80px);
-    opacity: 0.5;
-    animation: auroraFlow 20s ease-in-out infinite alternate;
-    transition: background 1s ease;
+    filter: blur(120px);
+    opacity: 0.6;
+    animation: auroraFlow 25s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    transition: background 1.5s ease;
+    mix-blend-mode: color-dodge;
 }
 
 .aurora-bg::after {
     background: radial-gradient(circle at 20% 50%, var(--theme-color-2), transparent 60%),
                 radial-gradient(circle at 70% 80%, var(--theme-color-1), transparent 50%);
-    animation: auroraFlow 25s ease-in-out infinite alternate-reverse;
-    opacity: 0.4;
+    animation: auroraFlow 30s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate-reverse;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
 }
 
 @keyframes auroraFlow {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-10%, 10%) scale(1.1); }
-    100% { transform: translate(10%, -10%) scale(1); }
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50% { transform: translate(-5%, 5%) scale(1.05) rotate(2deg); }
+    100% { transform: translate(5%, -5%) scale(1) rotate(-2deg); }
+}
+
+@keyframes bgStreaks {
+    0% { background-position: 200% 0, 0 0; }
+    100% { background-position: -200% 0, 0 0; }
 }
 
 .app-container {
@@ -87,11 +97,11 @@ body {
     height: 95vh;
     max-height: 850px;
     background: var(--app-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(30px) saturate(150%);
+    -webkit-backdrop-filter: blur(30px) saturate(150%);
     border: 1px solid var(--app-border);
-    border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 28px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -101,11 +111,11 @@ body {
 
 /* Header */
 .app-header {
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.95);
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.4);
     border-bottom: 1px solid var(--border-color);
     z-index: 10;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
 .header-top {
@@ -290,12 +300,13 @@ body {
 /* Chat Area */
 .chat-area {
     flex: 1;
-    padding: 20px;
+    padding: 24px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     scroll-behavior: smooth;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, transparent 100%);
 }
 
 .chat-area::-webkit-scrollbar {
@@ -344,13 +355,15 @@ body {
     color: var(--text-main);
     border-bottom-left-radius: 4px;
     box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .user .message-bubble {
-    background: var(--theme-color-1);
+    background: linear-gradient(135deg, var(--theme-color-1), var(--theme-color-2));
     color: var(--user-msg-text);
     border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 10px var(--theme-accent);
+    box-shadow: 0 5px 20px var(--theme-accent);
     transition: background 0.5s ease;
 }
 
@@ -390,8 +403,8 @@ body {
 
 /* Options Area */
 .options-area {
-    padding: 16px 20px 24px;
-    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 24px 30px;
+    background: rgba(255, 255, 255, 0.4);
     border-top: 1px solid var(--border-color);
 }
 
@@ -423,22 +436,23 @@ body {
 }
 
 .option-btn:hover {
-    background: var(--theme-color-1);
+    background: linear-gradient(135deg, var(--theme-color-1), var(--theme-color-2));
     color: white;
-    box-shadow: 0 4px 15px var(--theme-accent);
-    transform: translateY(-2px);
-    border-color: var(--theme-color-1);
+    box-shadow: 0 6px 25px var(--theme-accent);
+    transform: translateY(-3px) scale(1.02);
+    border-color: transparent;
 }
 
 .option-btn.primary {
-    background: var(--theme-color-1);
+    background: linear-gradient(135deg, var(--theme-color-1), var(--theme-color-2));
     color: white;
-    border-color: var(--theme-color-1);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .option-btn.primary:hover {
-    box-shadow: 0 6px 20px var(--theme-accent);
-    transform: translateY(-3px);
+    box-shadow: 0 8px 30px var(--theme-accent);
+    transform: translateY(-4px) scale(1.03);
 }
 
 /* Mobile adjustments */

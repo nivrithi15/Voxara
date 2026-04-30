@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voxara - Timeline</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Outfit, Roboto, Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="timeline.css">
+    <link rel="stylesheet" href="test-runner.css">
+    <link rel="stylesheet" href="accessibility.css">
 </head>
 <body>
     <div class="aurora-bg"></div>
     <div class="timeline-container">
         <header class="timeline-header">
             <div class="nav-links">
-                <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Voxara</a>
-                <a href="quiz.html" class="back-btn quiz-nav-btn"><i class="fa-solid fa-clipboard-question"></i> Take Quiz</a>
+                <a href="index.html" class="back-btn" aria-label="Go back to Home"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Voxara</a>
+                <a href="quiz.html" class="back-btn quiz-nav-btn" aria-label="Take the Quiz"><i class="fa-solid fa-clipboard-question" aria-hidden="true"></i> Take Quiz</a>
             </div>
             <h1>Voxara Timeline</h1>
+            <div id="google_translate_element" style="margin: 15px 0;"></div>
             <p>Click on any stage to learn more about the process.</p>
         </header>
 
@@ -93,5 +96,6 @@
 
     <script src="theme.js"></script>
     <script src="timeline.js"></script>
+    <script src="test-runner.js"></script>
 </body>
 </html>
