@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxara - Election Assistant</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="aurora-bg"></div>
+    <div class="app-container">
+        <!-- Header & Progress Tracker -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="assistant-profile">
+                    <div class="avatar"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="info">
+                        <h1>Voxara</h1>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a href="quiz.html" class="timeline-link" title="Take the Quiz" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                        <i class="fa-solid fa-clipboard-question"></i> Quiz
+                    </a>
+                    <a href="timeline.html" class="timeline-link" title="Interactive Timeline">
+                        <i class="fa-solid fa-calendar-days"></i> Timeline
+                    </a>
+                    <button class="restart-btn" id="restart-btn" title="Restart Conversation">
+                        <i class="fa-solid fa-arrow-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="progress-container" id="progress-container">
+                <!-- Steps will be dynamically injected here based on the flow -->
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <main class="chat-area" id="chat-area">
+            <!-- Messages will be injected here -->
+        </main>
+
+        <!-- Typing Indicator Container (Hidden by default) -->
+        <div class="typing-indicator-container" id="typing-indicator" style="display: none;">
+            <div class="avatar-small"><i class="fa-solid fa-robot"></i></div>
+            <div class="typing-bubble">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <!-- Options / Input Area -->
+        <footer class="options-area">
+            <div class="options-container" id="options-container">
+                <!-- Buttons will be dynamically injected here -->
+            </div>
+        </footer>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="app.js?v=2"></script>
+</body>
+
+</html>

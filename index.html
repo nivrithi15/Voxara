@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxara - Understand Elections. Step by Step.</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="intro.css">
+</head>
+
+<body>
+    <div class="aurora-bg"></div>
+
+    <div class="intro-container">
+        <!-- Floating Header -->
+        <header class="intro-header">
+            <div class="logo">
+                <i class="fa-solid fa-bolt logo-icon"></i>
+            </div>
+            <h1 class="main-title">Voxara</h1>
+            <p class="tagline">Understand Elections. Step by Step.</p>
+            <p class="description">An interactive AI assistant that guides you through how elections work, no matter where you are.</p>
+        </header>
+
+        <!-- Country Selection -->
+        <div class="region-selector-wrapper">
+            <label for="region-select">Select your region to personalize your experience:</label>
+            <div class="custom-select-container">
+                <i class="fa-solid fa-earth-americas select-icon"></i>
+                <select id="region-select" class="region-select">
+                    <option value="general" selected>General / Global</option>
+                    <option value="india">India</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="germany">Germany</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="chat.html" class="btn primary-btn pulse-animation">
+                <span>Get Started</span> <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <div class="secondary-actions">
+                <a href="timeline.html" class="btn secondary-btn">
+                    <i class="fa-solid fa-calendar-days"></i> Explore Timeline
+                </a>
+                <a href="quiz.html" class="btn secondary-btn">
+                    <i class="fa-solid fa-clipboard-question"></i> Take a Quick Quiz
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background decorative particles -->
+    <div class="particles">
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+        <div class="particle p4"></div>
+        <div class="particle p5"></div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="intro.js"></script>
+</body>
+
+</html>

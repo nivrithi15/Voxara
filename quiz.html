@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxara - Knowledge Quiz</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div class="aurora-bg"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="assistant-profile">
+                    <div class="avatar"><i class="fa-solid fa-clipboard-question"></i></div>
+                    <div class="info">
+                        <h1>Voxara Quiz</h1>
+                        <span class="status">Test Your Knowledge!</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a href="index.html" class="nav-link" title="Back to Chat">
+                        <i class="fa-solid fa-comments"></i>
+                    </a>
+                    <a href="timeline.html" class="nav-link" title="Interactive Timeline">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quiz Progress Tracker -->
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="quiz-area" id="quiz-area">
+            
+            <!-- Start Screen -->
+            <div id="start-screen" class="quiz-card active">
+                <div class="quiz-icon bg-purple"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h2>Ready for a Quick Quiz?</h2>
+                <p>Let's see what you've learned about the election process. It's just a few simple questions!</p>
+                <button id="start-btn" class="primary-btn">Start Quiz <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="question-screen" class="quiz-card" style="display: none;">
+                <h3 id="question-text" class="question-title">Question text goes here?</h3>
+                
+                <div id="options-container" class="options-grid">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div id="feedback-container" class="feedback-box" style="display: none;">
+                    <div id="feedback-icon" class="feedback-icon"></div>
+                    <div class="feedback-content">
+                        <h4 id="feedback-title">Correct!</h4>
+                        <p id="feedback-text">Explanation goes here.</p>
+                    </div>
+                </div>
+
+                <button id="next-btn" class="primary-btn" style="display: none; margin-top: 20px;">Next Question</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="quiz-card" style="display: none;">
+                <div class="quiz-icon bg-yellow"><i class="fa-solid fa-trophy"></i></div>
+                <h2>Quiz Complete!</h2>
+                <div class="score-display">
+                    <span id="score-text" class="score-number">0</span>
+                    <span class="score-total">/ 6</span>
+                </div>
+                <p id="results-message" class="results-message">Great job learning about democracy!</p>
+                
+                <div class="results-actions">
+                    <button id="restart-btn" class="primary-btn">Try Again <i class="fa-solid fa-rotate-right"></i></button>
+                    <a href="index.html" class="secondary-btn">Back to Chat</a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>
