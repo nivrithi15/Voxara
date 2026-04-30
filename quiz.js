@@ -1,3 +1,6 @@
+/**
+ * QUIZ CONTENT DATA
+ */
 const quizData = [
     {
         question: "What is the main purpose of an election?",
@@ -67,6 +70,9 @@ const quizData = [
     }
 ];
 
+/**
+ * UI ELEMENT SELECTORS
+ */
 const DOM = {
     startScreen: document.getElementById('start-screen'),
     questionScreen: document.getElementById('question-screen'),
@@ -86,11 +92,19 @@ const DOM = {
     progressFill: document.getElementById('quiz-progress-fill'),
     scoreText: document.getElementById('score-text'),
     resultsMessage: document.getElementById('results-message')
+};
+
+/**
+ * QUIZ STATE
+ */
 let currentQuestionIndex = 0;
 let score = 0;
 let hasAnswered = false;
 
-// Initialize
+/**
+ * CORE LOGIC SECTION
+ */
+
 function initQuiz() {
     currentQuestionIndex = 0;
     score = 0;
@@ -102,36 +116,21 @@ function initQuiz() {
     DOM.startScreen.classList.add('active');
 }
 
-DOM.startBtn.addEventListener('click', () => {
-    DOM.startScreen.style.display = 'none';
-    DOM.questionScreen.style.display = 'block';
-    loadQuestion();
-});
-
-DOM.restartBtn.addEventListener('click', initQuiz);
-
-DOM.nextBtn.addEventListener('click', () => {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < quizData.length) {
-        loadQuestion();
-    } else {
-        showResults();
-    }
-});
-
+/**
+ * loadQuestion - Renders the current question and generates option buttons.
+ */
 function loadQuestion() {
     hasAnswered = false;
     const currentQuizData = quizData[currentQuestionIndex];
     
-    // Reset UI
+    // Reset UI state for new question
     DOM.feedbackContainer.style.display = 'none';
     DOM.nextBtn.style.display = 'none';
     DOM.optionsContainer.innerHTML = '';
     
-    // Set text
     DOM.questionText.innerText = currentQuizData.question;
     
-    // Create options
+    // Create option buttons dynamically
     currentQuizData.options.forEach((option, index) => {
         const button = document.createElement('button');
         button.innerText = option;
@@ -143,6 +142,9 @@ function loadQuestion() {
     updateProgress();
 }
 
+/**
+ * selectAnswer - Handles the user selection, provides feedback, and updates score.
+ */
 function selectAnswer(selectedIndex, buttonElement) {
     if (hasAnswered) return;
     hasAnswered = true;
@@ -151,7 +153,7 @@ function selectAnswer(selectedIndex, buttonElement) {
     const isCorrect = selectedIndex === currentQuizData.correctAnswer;
     const allOptions = DOM.optionsContainer.children;
 
-    // Disable all buttons and highlight correct/incorrect
+    // Highlight correct and incorrect answers visually
     for (let i = 0; i < allOptions.length; i++) {
         allOptions[i].disabled = true;
         
@@ -162,7 +164,7 @@ function selectAnswer(selectedIndex, buttonElement) {
         }
     }
 
-    // Show Feedback
+    // Display localized feedback and explanation
     DOM.feedbackContainer.style.display = 'flex';
     DOM.feedbackText.innerText = currentQuizData.explanation;
     
@@ -205,5 +207,25 @@ function showResults() {
     }
 }
 
-// Start
+/**
+ * NAVIGATION EVENT LISTENERS
+ */
+DOM.startBtn.addEventListener('click', () => {
+    DOM.startScreen.style.display = 'none';
+    DOM.questionScreen.style.display = 'block';
+    loadQuestion();
+});
+
+DOM.restartBtn.addEventListener('click', initQuiz);
+
+DOM.nextBtn.addEventListener('click', () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        showResults();
+    }
+});
+
+// Initial load
 initQuiz();

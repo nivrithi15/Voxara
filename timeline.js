@@ -1,17 +1,21 @@
+/**
+ * TIMELINE INTERACTION LOGIC
+ * Implements an accordion-style interaction for the election timeline stages.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const timelineItems = document.querySelectorAll('.timeline-item');
 
     timelineItems.forEach(item => {
         item.addEventListener('click', () => {
-            // Check if currently active
+            // Check if the clicked item is already expanded
             const isActive = item.classList.contains('active');
 
-            // Close all items
+            // Reset all items to collapsed state for a clean accordion effect
             timelineItems.forEach(el => {
                 el.classList.remove('active');
             });
 
-            // If it wasn't active before, open it now
+            // Toggle the clicked item: Expand if it was closed, stay closed if it was open
             if (!isActive) {
                 item.classList.add('active');
             }

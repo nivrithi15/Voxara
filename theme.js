@@ -1,3 +1,7 @@
+/**
+ * THEME MANAGEMENT SECTION
+ * Handles regional color schemes and persistence.
+ */
 const themeColors = {
     general: { color1: '#4f46e5', color2: '#818cf8', accent: '#c7d2fe' },
     india: { color1: '#f97316', color2: '#10b981', accent: '#3b82f6' },
@@ -6,29 +10,44 @@ const themeColors = {
     germany: { color1: '#1f2937', color2: '#ef4444', accent: '#facc15' }
 };
 
+/**
+ * applyTheme - Updates CSS variables based on the selected region.
+ * This logic ensures that the UI (aurora background, buttons, avatars) 
+ * visually reflects the selected country.
+ */
 function applyTheme(region) {
     const root = document.documentElement;
     const theme = themeColors[region] || themeColors['general'];
+    
+    // Update global CSS variables for consistency
     root.style.setProperty('--theme-color-1', theme.color1);
     root.style.setProperty('--theme-color-2', theme.color2);
     root.style.setProperty('--theme-accent', theme.accent);
+    
+    // Persist choice so the theme remains when navigating between pages
     localStorage.setItem('userRegion', region);
 }
 
-// Automatically apply theme on load across all pages
+/**
+ * NAVIGATION & INITIALIZATION SECTION
+ * Ensures all components start correctly on page load.
+ */
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Restore User Region & Theme
     const userRegion = localStorage.getItem('userRegion') || 'general';
     applyTheme(userRegion);
     
-    // Accessibility Initialization
+    // 2. Initialize Features
     initAccessibility();
-    
-    // Google Services Integration
     initGoogleServices();
 });
 
+/**
+ * GOOGLE SERVICES SECTION
+ * Lightweight integration for Analytics and Translation.
+ */
 function initGoogleServices() {
-    // 1. Google Analytics Mockup
+    // Inject Google Analytics (Mock ID)
     const gaScript = document.createElement('script');
     gaScript.async = true;
     gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-MOCK-ID';
@@ -39,13 +58,12 @@ function initGoogleServices() {
     gtag('js', new Date());
     gtag('config', 'G-MOCK-ID');
     
-    console.log('Google Analytics initialized with ID: G-MOCK-ID');
-
-    // 2. Google Translate Initialization
+    // Inject Google Translate element.js
     const translateScript = document.createElement('script');
     translateScript.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
     document.head.appendChild(translateScript);
 
+    // Callback for Google Translate widget
     window.googleTranslateElementInit = function() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
@@ -54,8 +72,12 @@ function initGoogleServices() {
     };
 }
 
+/**
+ * ACCESSIBILITY SECTION
+ * Handles floating widget injection and accessibility preferences.
+ */
 function initAccessibility() {
-    // Inject Widget
+    // Inject the Accessibility Floating Widget
     const widget = document.createElement('div');
     widget.className = 'a11y-widget';
     widget.innerHTML = `
@@ -64,7 +86,7 @@ function initAccessibility() {
         </button>
         <div class="a11y-menu" id="a11y-menu">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="margin: 0;">Settings</h3>
+                <h3 style="margin: 0; font-size: 0.9rem;">Settings</h3>
                 <span style="font-size: 0.6rem; background: #10b981; color: white; padding: 2px 6px; border-radius: 10px;">GA Active</span>
             </div>
             <h3>Text Size</h3>
@@ -73,7 +95,7 @@ function initAccessibility() {
                 <button class="a11y-btn" id="font-inc" aria-label="Increase Font Size">A+</button>
             </div>
             <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
-            <button class="a11y-mode-toggle" id="a11y-mode-toggle">Enable High Contrast</button>
+            <button class="a11y-mode-toggle" id="a11y-mode-toggle">High Contrast Mode</button>
         </div>
     `;
     document.body.appendChild(widget);
@@ -84,10 +106,13 @@ function initAccessibility() {
     const fontDec = document.getElementById('font-dec');
     const modeToggle = document.getElementById('a11y-mode-toggle');
 
-    // Toggle Menu
-    toggle.addEventListener('click', () => menu.classList.toggle('show'));
+    // Menu toggle logic
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('show');
+    });
 
-    // Font Size Logic
+    // Persistent Font Scaling logic
     let currentSize = parseInt(localStorage.getItem('fontSize')) || 16;
     document.documentElement.style.setProperty('--base-font-size', `${currentSize}px`);
 
@@ -110,7 +135,7 @@ function initAccessibility() {
         localStorage.setItem('fontSize', currentSize);
     }
 
-    // Accessible Mode Logic
+    // High Contrast Mode logic
     let isA11yMode = localStorage.getItem('a11yMode') === 'true';
     if (isA11yMode) {
         document.body.classList.add('a11y-mode');
@@ -121,10 +146,10 @@ function initAccessibility() {
         isA11yMode = !isA11yMode;
         document.body.classList.toggle('a11y-mode', isA11yMode);
         localStorage.setItem('a11yMode', isA11yMode);
-        modeToggle.textContent = isA11yMode ? 'Disable High Contrast' : 'Enable High Contrast';
+        modeToggle.textContent = isA11yMode ? 'Disable High Contrast' : 'High Contrast Mode';
     });
 
-    // Close menu when clicking outside
+    // Close menu when clicking anywhere else
     document.addEventListener('click', (e) => {
         if (!widget.contains(e.target)) menu.classList.remove('show');
     });

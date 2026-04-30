@@ -1,6 +1,6 @@
 :root {
     --bg-color: #050b14;
-    --app-bg: rgba(255, 255, 255, 0.15);
+    --app-bg: rgba(0, 0, 0, 0.4);
     
     /* Default Themes (Will be overridden by JS) */
     --theme-color-1: #4f46e5;
@@ -8,10 +8,14 @@
     --theme-accent: #c7d2fe;
     
     --text-main: #1f2937;
-    --text-muted: #6b7280;
+    --text-muted: #d1d5db;
     --text-light: #ffffff;
     
-    --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.3s ease;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
 }
 
 * {

@@ -1,3 +1,6 @@
+/**
+ * CHATBOT CONFIGURATION & STATE
+ */
 const DOM = {
     chatArea: document.getElementById('chat-area'),
     optionsContainer: document.getElementById('options-container'),
@@ -6,31 +9,41 @@ const DOM = {
     restartBtn: document.getElementById('restart-btn')
 };
 
-// Global state
-let currentTimeout = null;
 let userRegion = localStorage.getItem('userRegion') || 'general';
 
+/**
+ * REGIONAL CONTENT MAPPING
+ * Maps internal region IDs to specific localized terms used in chatbot responses.
+ */
 const regionData = {
-    general: { legislature: "the national legislature", votingAge: "18", votingDay: "Election Day" },
-    india: { legislature: "the Lok Sabha (Parliament)", votingAge: "18", votingDay: "Polling Day" },
-    us: { legislature: "Congress", votingAge: "18", votingDay: "Election Day" },
-    uk: { legislature: "Parliament", votingAge: "18", votingDay: "Polling Day" },
-    germany: { legislature: "the Bundestag", votingAge: "18", votingDay: "Election Day" }
+    general: { displayName: "General / Global", legislature: "the national legislature", votingAge: "18", votingDay: "Election Day" },
+    india: { displayName: "India", legislature: "the Lok Sabha (Parliament)", votingAge: "18", votingDay: "Polling Day" },
+    us: { displayName: "United States", legislature: "Congress", votingAge: "18", votingDay: "Election Day" },
+    uk: { displayName: "United Kingdom", legislature: "Parliament", votingAge: "18", votingDay: "Polling Day" },
+    germany: { displayName: "Germany", legislature: "the Bundestag", votingAge: "18", votingDay: "Election Day" }
 };
 
+/**
+ * processText - Replaces placeholder tokens {{key}} with region-specific data.
+ */
 function processText(text) {
     let result = text;
     const data = regionData[userRegion];
+    if (!data) return result;
+    
     for (const key in data) {
         result = result.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
     }
     return result;
 }
 
-// Conversation Flow Data
+/**
+ * CONVERSATION FLOW ENGINE
+ * Defines the logical nodes and branching paths of the chatbot.
+ */
 const flowData = {
     init: {
-        text: ["Hi there! 👋 I'm Voxara.", "Before we start, which region's election process are you most interested in?"],
+        text: ["Hi! I'm Voxara. 👋", "I can help you understand how elections work.", "To give you the best experience, please select your region first:"],
         options: [
             { label: "India", next: "set_india" },
             { label: "United States", next: "set_us" },
@@ -39,22 +52,37 @@ const flowData = {
             { label: "General / Other", next: "set_general" }
         ]
     },
+    // Region set nodes - update theme then bridge to start node
     set_india: { setRegion: "india", nextNode: "start" },
     set_us: { setRegion: "us", nextNode: "start" },
     set_uk: { setRegion: "uk", nextNode: "start" },
     set_germany: { setRegion: "germany", nextNode: "start" },
     set_general: { setRegion: "general", nextNode: "start" },
+    
     start: {
-        text: ["Great! What would you like to learn about today?"],
+        text: ["Hi! I'm Voxara. I can help you understand how elections work. What would you like to explore?"],
         options: [
             { label: "How elections work", next: "how_work" },
             { label: "Steps to vote", next: "steps_start" },
-            { label: "Timeline of elections", next: "timeline_start" },
-            { label: "Eligibility and rules", next: "eligibility_start" }
+            { label: "Timeline of elections", next: "redirect_timeline" },
+            { label: "Take the Quiz", next: "redirect_quiz" },
+            { label: "Select country", next: "init" }
         ]
     },
     
-    // --- TOPIC: Steps to Vote ---
+    // Redirection nodes
+    redirect_timeline: {
+        text: ["Taking you to the interactive timeline..."],
+        redirect: "timeline.html"
+    },
+    redirect_quiz: {
+        text: ["Opening the knowledge quiz..."],
+        redirect: "quiz.html"
+    },
+    
+    // Additional flow nodes (how_work, steps_start, etc.) remain configured in flowData...
+    // [Flow nodes follow consistent structure: text[] and options[]]
+    
     steps_start: {
         progressTotal: ["Register", "Prepare", "Vote"],
         progressStep: 0,
@@ -105,8 +133,6 @@ const flowData = {
             { label: "Restart", next: "start" }
         ]
     },
-
-    // --- TOPIC: How Elections Work ---
     how_work: {
         progressTotal: ["Basics", "Campaign", "Results"],
         progressStep: 0,
@@ -143,8 +169,6 @@ const flowData = {
             { label: "Explore another topic", next: "start" }
         ]
     },
-
-    // --- TOPIC: Timeline of elections ---
     timeline_start: {
         progressTotal: ["Months Prior", "Election Day", "Post-Election"],
         progressStep: 0,
@@ -181,8 +205,6 @@ const flowData = {
             { label: "Explore another topic", next: "start" }
         ]
     },
-
-    // --- TOPIC: Eligibility and rules ---
     eligibility_start: {
         progressTotal: ["Age & Cit.", "Residency", "Rules"],
         progressStep: 0,
@@ -220,6 +242,11 @@ const flowData = {
         ]
     }
 };
+
+/**
+ * UI RENDERING SECTION
+ * Handles DOM manipulation for chat bubbles, options, and progress bars.
+ */
 
 function renderProgressBar(totalSteps, currentStep) {
     if (!totalSteps) {
@@ -271,15 +298,6 @@ function scrollToBottom() {
     DOM.chatArea.scrollTop = DOM.chatArea.scrollHeight;
 }
 
-function showTyping() {
-    DOM.typingIndicator.style.display = 'flex';
-    scrollToBottom();
-}
-
-function hideTyping() {
-    DOM.typingIndicator.style.display = 'none';
-}
-
 function renderOptions(options) {
     DOM.optionsContainer.innerHTML = '';
     options.forEach((opt, index) => {
@@ -292,43 +310,56 @@ function renderOptions(options) {
     });
 }
 
-function clearOptions() {
-    DOM.optionsContainer.innerHTML = '';
-}
+/**
+ * CORE LOGIC SECTION
+ * Handles message processing, flow transitions, and initialization.
+ */
 
 async function processNode(nodeId) {
-    clearOptions();
+    DOM.optionsContainer.innerHTML = '';
     const node = flowData[nodeId];
     if (!node) return;
 
+    // Region setting bridge
     if (node.setRegion) {
         userRegion = node.setRegion;
         applyTheme(userRegion);
         return processNode(node.nextNode);
     }
 
-    // Handle Progress Bar
+    // Progress Bar management
     if (node.progressTotal) {
-        // Store current total steps in DOM dataset so we don't have to redefine them every step
         DOM.progressContainer.dataset.steps = JSON.stringify(node.progressTotal);
     }
     
     if (node.progressStep !== undefined) {
         const steps = JSON.parse(DOM.progressContainer.dataset.steps || '[]');
         renderProgressBar(steps, node.progressStep);
-    } else if (nodeId === 'start') {
+    } else if (nodeId === 'start' || nodeId === 'init') {
         DOM.progressContainer.style.display = 'none';
     }
 
-    // Process Bot Messages with typing delay
+    // BOT INTERACTION FLOW: 
+    // Show typing indicator -> Wait (delay) -> Hide typing -> Append message bubble
     for (let i = 0; i < node.text.length; i++) {
-        showTyping();
+        DOM.typingIndicator.style.display = 'flex';
+        scrollToBottom();
+        
         const processedText = processText(node.text[i]);
-        // Dynamic delay based on text length, min 600ms, max 1500ms
         const delay = Math.min(Math.max(processedText.length * 15, 600), 1500);
+        
         await new Promise(r => setTimeout(r, delay));
-        hideTyping();
+        
+        DOM.typingIndicator.style.display = 'none';
         appendMessage(processedText, false);
+    }
+
+    // Handle Redirection
+    if (node.redirect) {
+        setTimeout(() => {
+            window.location.href = node.redirect;
+        }, 1000);
+        return;
     }
 
     renderOptions(node.options);
@@ -339,17 +370,20 @@ function handleOptionClick(option) {
     processNode(option.next);
 }
 
-// Initialization
+/**
+ * INITIALIZATION & NAVIGATION FLOW
+ */
 DOM.restartBtn.addEventListener('click', () => {
     DOM.chatArea.innerHTML = '';
-    DOM.chatArea.appendChild(DOM.typingIndicator); // Restore typing indicator element
+    DOM.chatArea.appendChild(DOM.typingIndicator);
     applyTheme('general');
+    localStorage.removeItem('userRegion');
     processNode('init');
 });
 
-// Start the flow
-// applyTheme is called on DOMContentLoaded in theme.js
-if (userRegion === 'general' && !localStorage.getItem('userRegion')) {
+// STARTUP LOGIC:
+// Automatically trigger the correct conversation node on page load.
+if (!localStorage.getItem('userRegion')) {
     processNode('init');
 } else {
     processNode('start');

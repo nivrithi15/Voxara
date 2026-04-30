@@ -7,9 +7,10 @@
     --theme-color-2: #818cf8;
     --theme-accent: #c7d2fe;
     
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-    --border-color: rgba(229, 231, 235, 0.6);
+    --text-main: #ffffff;
+    --text-muted: #d1d5db;
+    --text-light: #ffffff;
+    --border-color: rgba(255, 255, 255, 0.3);
     
     /* Stage Colors */
     --color-purple: var(--theme-color-1);
@@ -101,12 +102,60 @@ body {
 }
 
 .nav-links {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+.translate-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.translate-wrapper:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Google Translate Overrides */
+#google_translate_element {
+    height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.goog-te-gadget-simple {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: inherit !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.goog-te-gadget-icon {
+    display: none !important;
+}
+
+.goog-te-menu-value {
+    margin-left: 0 !important;
+    color: var(--text-main) !important;
+}
+
+.goog-te-menu-value span {
+    color: var(--text-main) !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
 }
 
 .back-btn {
@@ -217,14 +266,19 @@ body {
 /* Content Cards */
 .timeline-content {
     padding: 24px 30px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(30px) saturate(150%);
     -webkit-backdrop-filter: blur(30px) saturate(150%);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
     transition: var(--transition);
     border: 1px solid rgba(255,255,255,0.2);
     position: relative;
+}
+
+.timeline-content h3 {
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .timeline-item:hover .timeline-content {

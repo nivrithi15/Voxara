@@ -1,6 +1,6 @@
 :root {
     --bg-color: #050b14;
-    --app-bg: rgba(255, 255, 255, 0.15);
+    --app-bg: rgba(0, 0, 0, 0.4);
     --app-border: rgba(255, 255, 255, 0.3);
     
     /* Default / General Theme Variables */
@@ -8,11 +8,11 @@
     --theme-color-2: #818cf8;
     --theme-accent: #c7d2fe;
     
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-    --bot-msg-bg: rgba(255, 255, 255, 0.65);
+    --text-main: #ffffff;
+    --text-muted: #d1d5db;
+    --bot-msg-bg: rgba(0, 0, 0, 0.4);
     --user-msg-text: #ffffff;
-    --border-color: rgba(255, 255, 255, 0.2);
+    --border-color: rgba(255, 255, 255, 0.3);
     --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -38,6 +38,12 @@ body {
     overflow: hidden;
     position: relative;
     margin: 0;
+    font-size: 16px;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    color: #ffffff;
 }
 
 /* Aurora Background */
@@ -89,6 +95,73 @@ body {
 @keyframes bgStreaks {
     0% { background-position: 200% 0, 0 0; }
     100% { background-position: -200% 0, 0 0; }
+}
+
+.app-header {
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    gap: 15px;
+}
+
+.translate-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.translate-wrapper:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Google Translate Overrides */
+#google_translate_element {
+    height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.goog-te-gadget-simple {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: inherit !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.goog-te-gadget-icon {
+    display: none !important;
+}
+
+.goog-te-menu-value {
+    margin-left: 0 !important;
+    color: var(--text-main) !important;
+}
+
+.goog-te-menu-value span {
+    color: var(--text-main) !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+}
+
+.goog-te-menu-value span:nth-child(3) {
+    display: none !important; /* Hide the arrow if we want to use our own or keep it clean */
+}
+
+.goog-te-menu-value span:nth-child(5) {
+    display: none !important; /* Hide the vertical bar */
 }
 
 .app-container {
@@ -455,8 +528,25 @@ body {
     transform: translateY(-4px) scale(1.03);
 }
 
-/* Mobile adjustments */
+/* Responsive Header */
 @media (max-width: 480px) {
+    .app-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .translate-wrapper {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .bot-profile .info h1 {
+        font-size: 1.1rem;
+    }
+    
     .app-container {
         height: 100vh;
         max-height: 100vh;
