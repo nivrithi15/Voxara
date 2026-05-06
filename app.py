@@ -7,10 +7,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuration - Move to environment variables in production
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyBKd-KxEIfRjlEkdkTi3ewI_9hmrEjQ_Bc')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '[GCP_API_KEY]')
 GEMINI_MODEL = 'gemini-1.5-flash'
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
-
+    
 # In-memory data (could be moved to a database later)
 QUIZ_DATA = [
     {"question": "What is the minimum voting age in most countries?", "options": ["16", "18", "21", "25"], "correct": 1},

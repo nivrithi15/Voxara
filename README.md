@@ -122,8 +122,6 @@ Voxara includes test coverage to ensure reliability and robustness:
     test_chat.py
     test_quiz.py
     test_api.py
-```
-
 
 ##  Acknowledgements
 
